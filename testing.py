@@ -2,7 +2,7 @@ import ffmpeg
 from pathlib import Path
 import json
 
-file = Path(r"C:\Users\Jimmy\PycharmProjects\ffmpeg\big_buck_bunny_720p_1mb.mkv")
+file = Path(r"C:\Users\Jimmy\PycharmProjects\ffmpeg\videos\big_buck_bunny_720p_1mb.mp4")
 input_file = str(file)
 
 probe = ffmpeg.probe(filename=input_file)
@@ -12,7 +12,10 @@ probe = ffmpeg.probe(filename=input_file)
 input_stream = ffmpeg.input(filename=input_file)
 
 # Produces the output stream object, but does not run it yet.
-out_put = ffmpeg.output(input_stream, "out_put_test.mp4", format="mp4", vcodec="libx264")
+# out_put = ffmpeg.output(input_stream, "out_put_test.mp4", format="mp4", vcodec="libx264", acodec=[""])
+out_put = ffmpeg.output(input_stream["0"], input_stream["1"], input_stream["1"], "out_put_test.mkv",
+                        **{"c:v": "libx264"}, **{"c:a:0": "copy"}, **{"c:a:1": "aac"},
+                        **{"b:a:1": "128k"}, ac=2)
 
 # Adds -y
 out_put = ffmpeg.overwrite_output(out_put)
